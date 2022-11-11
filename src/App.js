@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import { Navbar } from "./components/Navbar";
+import { SearchEngine } from "./components/SearchEngine";
+import { Home } from "./components/Home";
+import { TopSale } from "./components/TopSale";
+import { Footer } from "./components/Footer";
+import { AllProducts } from "./components/AllProducts";
 
-function App() {
+import ListPage from "./components/ListPage";
+import { getPosts } from "./components/api/api";
+
+const App = () => {
+  const [posts, setPosts] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    getPosts().then((json) => {
+      setPosts(json);
+      setSearchResults(json);
+    });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      {/* <SearchEngine /> */}
+      <>
+        <SearchEngine posts={posts} setSearchResults={setSearchResults} />
+        <ListPage searchResults={searchResults} />
+      </>
+      <Home />
+      <TopSale />
+      <AllProducts />
+      <Footer />
     </div>
   );
-}
+};
 
 export default App;
